@@ -242,6 +242,40 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &682970740 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6342037568942201768, guid: cc135c7763e309c4b883623a9839cba7,
+    type: 3}
+  m_PrefabInstance: {fileID: 6342037569386752299}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &682970741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682970740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e22e18fa0f6624094b3cfc196026a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumber: 1
+  shell: {fileID: 5344452297458250685, guid: 08f3fc6f3ffc2044db0978c12503c325, type: 3}
+  fireTransform: {fileID: 179476453}
+  aimSlider: {fileID: 180033288}
+  shootingAudioSource: {fileID: 682970743}
+  ChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
+  fireClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  minLaunchForce: 15
+  maxLaunchForce: 30
+  maxChargeTime: 0.75
+--- !u!82 &682970743 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6342037568942169278, guid: cc135c7763e309c4b883623a9839cba7,
+    type: 3}
+  m_PrefabInstance: {fileID: 6342037569386752299}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &940291589 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 261499587, guid: cc135c7763e309c4b883623a9839cba7,
