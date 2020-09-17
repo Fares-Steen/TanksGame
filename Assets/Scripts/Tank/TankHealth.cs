@@ -41,11 +41,11 @@ public class TankHealth : MonoBehaviour
         SetHealthInUI();
     }
 
-    private void TakeDamage(float amount)
+    public void TakeDamage(float amount)
     {
         currentHealth -= amount;
         SetHealthInUI();
-        if (currentHealth >= 0f && !dead)
+        if (currentHealth <= 0f && !dead)
         {
             OnDeath();
         }
