@@ -18,7 +18,7 @@ public class CameraControl : MonoBehaviour
     private Vector3 moveVelocity;
     private Vector3 desiredPosition;
 
-    void Start()
+    void OnEnable()
     {
         camera = GetComponentInChildren<Camera>();
     }
@@ -100,7 +100,15 @@ public class CameraControl : MonoBehaviour
 
             size = Mathf.Max(size, Mathf.Abs(desiredPositionToTarget.y));
 
-            size = Mathf.Max(size, Mathf.Abs(desiredPositionToTarget.x) / camera.aspect);
+            try
+            {
+                size = Mathf.Max(size, Mathf.Abs(desiredPositionToTarget.x) / camera.aspect);
+            }
+            catch (System.Exception e)
+            {
+
+                throw;
+            }
 
         }
 

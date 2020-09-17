@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
-    [SerializeField]
+
     private int numOfRoundsNeedToWin = 2;
 
-    [SerializeField]
+
     private float startDelay = 3f;
 
-    [SerializeField]
+
     private float endDelay = 3f;
 
     [SerializeField]
@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameLoop());
     }
 
+
+
     private IEnumerator GameLoop()
     {
         yield return StartCoroutine(RoundStarting());
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour
 
         if (gameWinner != null)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
         else
         {
