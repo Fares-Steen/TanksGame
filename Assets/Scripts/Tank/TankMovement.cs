@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-public class TankMovment : MonoBehaviour
+public class TankMovement : MonoBehaviour
 {
-    [SerializeField]
-    private int tankNumber = 1;
+
+    public int playerNumber = 1;
     [SerializeField]
     private float tankSpeed = 12f;
     [SerializeField]
@@ -53,8 +53,8 @@ public class TankMovment : MonoBehaviour
     }
     private void SetTheControllerForTheTank()
     {
-        movementAxisName = "Vertical" + tankNumber;
-        turnAxisName = "Horizontal" + tankNumber;
+        movementAxisName = "Vertical" + playerNumber;
+        turnAxisName = "Horizontal" + playerNumber;
     }
 
     void Update()

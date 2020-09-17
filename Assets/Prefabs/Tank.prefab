@@ -812,7 +812,8 @@ AudioSource:
   m_GameObject: {fileID: 6342037568942201768}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 1916516078489643649, guid: 6a08f3935fc612247b4c883da63acb89,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.43
@@ -908,7 +909,8 @@ AudioSource:
   m_GameObject: {fileID: 6342037568942201768}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3681974582373339606, guid: 6a08f3935fc612247b4c883da63acb89,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.388
@@ -1007,7 +1009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89e0c7e7d5a140d4d992bf74c8874614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankNumber: 1
+  playerNumber: 1
   tankSpeed: 12
   tankTurnSpeed: 180
   movementAduio: {fileID: 6342037568942169278}

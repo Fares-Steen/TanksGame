@@ -11,8 +11,7 @@ public class CameraControl : MonoBehaviour
     [SerializeField]
     private float minSize = 6.5f;
 
-    [SerializeField]
-    private Transform[] targetTanks;
+    public Transform[] targetTanks;
 
     private Camera camera;
     private float zoomSpeed;

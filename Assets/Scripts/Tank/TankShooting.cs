@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class TankShooting : MonoBehaviour
 {
-    [SerializeField]
-    private int playerNumber = 1;
+    public int playerNumber = 1;
 
     [SerializeField]
     private Rigidbody shell;
