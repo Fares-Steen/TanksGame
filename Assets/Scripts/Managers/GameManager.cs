@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public TankManager[] tanks;
 
+
+
     private int roundNumber;
     private WaitForSeconds startWait;
     private WaitForSeconds endWait;
@@ -34,7 +37,7 @@ public class GameManager : MonoBehaviour
     private TankManager roundWinner;
     private TankManager gameWinner;
 
-    void Start()
+    void Awake()
     {
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
@@ -66,18 +69,18 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
-        DisableTankControl();
-        roundWinner = null;
-        roundWinner = GetRoundWinner();
-        if (roundWinner != null)
-        {
-            roundWinner.wins++;
-        }
+        //DisableTankControl();
+        //roundWinner = null;
+        //roundWinner = GetRoundWinner();
+        //if (roundWinner != null)
+        //{
+        //    roundWinner.wins++;
+        //}
 
-        gameWinner = GetGameWinner();
-        string message = EndMessage();
-        messageText.text = message;
-        yield return endWait;
+        //gameWinner = GetGameWinner();
+        //string message = EndMessage();
+        //messageText.text = message;
+        yield return null;
     }
 
     private string EndMessage()
@@ -129,7 +132,7 @@ public class GameManager : MonoBehaviour
         EnableTanksControl();
         messageText.text = string.Empty;
 
-        while (!OneTankLeft())
+        while (OneTankLeft())
         {
             yield return null;
 
@@ -189,13 +192,20 @@ public class GameManager : MonoBehaviour
 
     private void SetCameraTargets()
     {
-        Transform[] targets = new Transform[tanks.Length];
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        for (int i = 0; i < targets.Length; i++)
+        List<Transform> targets = new List<Transform>();
+
+        for (int i = 0; i < tanks.Length; i++)
         {
-            targets[i] = tanks[i].instance.transform;
+            targets.Add(tanks[i].instance.transform);
         }
-        cameraControl.targetTanks = targets;
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            targets.Add(enemies[i].transform);
+        }
+
+        cameraControl.targetTanks = targets.ToArray();
     }
 
     private void SpawnAllTanks()
