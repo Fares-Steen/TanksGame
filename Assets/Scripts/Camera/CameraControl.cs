@@ -107,7 +107,7 @@ public class CameraControl : MonoBehaviour
             catch (System.Exception e)
             {
 
-                throw;
+
             }
 
         }

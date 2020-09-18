@@ -37,10 +37,14 @@ public class ShellExplosion : MonoBehaviour
 
     private void FindAllTanksAroundTheShellAndDamgeThem()
     {
-        Collider[] collidersArray = Physics.OverlapSphere(transform.position, explosionRadius, tankMask);
+        Collider[] collidersArray = Physics.OverlapSphere(transform.position, explosionRadius);
 
         for (int i = 0; i < collidersArray.Length; i++)
         {
+            if (collidersArray[i].tag != ("Player") && collidersArray[i].tag != ("Enemy"))
+            {
+                continue;
+            }
             Rigidbody targetRigidBody = collidersArray[i].GetComponent<Rigidbody>();
 
             if (!targetRigidBody)
