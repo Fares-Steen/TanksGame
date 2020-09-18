@@ -26,25 +26,33 @@ public class GameManager : MonoBehaviour
     private GameObject tankPrefab;
 
     [SerializeField]
+    private GameObject enemyPrefab;
+
+    [SerializeField]
     public TankManager[] tanks;
 
 
+    private List<EnemyManager> enemies;
+
 
     private int roundNumber;
+    private int levelNumber;
     private WaitForSeconds startWait;
     private WaitForSeconds endWait;
 
     private TankManager roundWinner;
-    private TankManager gameWinner;
+    private bool gameOver;
+    private bool levelWins;
 
     void Awake()
     {
+        enemies = new List<EnemyManager>();
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
         cameraControl = GameObject.FindGameObjectWithTag("Camera").GetComponent<CameraControl>();
         SpawnAllTanks();
 
-        SetCameraTargets();
+
 
         StartCoroutine(GameLoop());
     }
@@ -57,7 +65,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(RoundPlaying());
         yield return StartCoroutine(RoundEnding());
 
-        if (gameWinner != null)
+        if (gameOver)
         {
             SceneManager.LoadScene(1);
         }
@@ -69,9 +77,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
-        //DisableTankControl();
-        //roundWinner = null;
-        //roundWinner = GetRoundWinner();
+        DisableTankControl();
+
+        SetGameOver();
+        if (numOfRoundsNeedToWin == roundNumber)
+        {
+            levelWins = true;
+            roundNumber = 0;
+        }
         //if (roundWinner != null)
         //{
         //    roundWinner.wins++;
@@ -80,7 +93,7 @@ public class GameManager : MonoBehaviour
         //gameWinner = GetGameWinner();
         //string message = EndMessage();
         //messageText.text = message;
-        yield return null;
+        yield return endWait;
     }
 
     private string EndMessage()
@@ -100,32 +113,27 @@ public class GameManager : MonoBehaviour
 
         }
 
-        if (gameWinner != null)
-        {
-            message = gameWinner.coloredPlayerText + " WINS THE GAME!";
-        }
+        //if (gameWinner != null)
+        //{
+        //    message = gameWinner.coloredPlayerText + " WINS THE GAME!";
+        //}
         return message;
     }
 
-    private TankManager GetGameWinner()
+    private void SetGameOver()
     {
+        int numOfTanksLeft = 0;
+
         for (int i = 0; i < tanks.Length; i++)
         {
-            if (tanks[i].wins == numOfRoundsNeedToWin)
-                return tanks[i];
+            if (tanks[i].instance.activeSelf)
+                numOfTanksLeft++;
         }
-        return null;
+
+        gameOver = numOfTanksLeft < 1;
     }
 
-    private TankManager GetRoundWinner()
-    {
-        foreach (var tank in tanks)
-        {
-            if (tank.instance.activeSelf)
-                return tank;
-        }
-        return null;
-    }
+
 
     private IEnumerator RoundPlaying()
     {
@@ -141,6 +149,7 @@ public class GameManager : MonoBehaviour
 
     private bool OneTankLeft()
     {
+        int numOfEnemiesLeft = 0;
         int numOfTanksLeft = 0;
 
         for (int i = 0; i < tanks.Length; i++)
@@ -149,7 +158,13 @@ public class GameManager : MonoBehaviour
                 numOfTanksLeft++;
         }
 
-        return numOfTanksLeft <= 1;
+        foreach (var enemy in enemies)
+        {
+            if (enemy.instance.activeSelf)
+                numOfEnemiesLeft++;
+        }
+
+        return numOfEnemiesLeft >= 1 && numOfTanksLeft >= 1;
     }
 
     private void EnableTanksControl()
@@ -162,15 +177,25 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundStarting()
     {
+        if (levelWins || levelNumber == 0)
+        {
+            levelNumber++;
+        }
+
         ResetAllTanks();
+        RemoveAllEnemies();
 
         DisableTankControl();
+        SpawnAllEnemies();
 
+        SetCameraTargets();
         cameraControl.SetStartPositionAndSize();
 
         roundNumber++;
-        messageText.text = "Round " + roundNumber;
-
+        messageText.text = "Level " + levelNumber;
+        messageText.text += "\n\n\n\n";
+        messageText.text += "Round " + roundNumber;
+        levelWins = false;
         yield return startWait;
     }
 
@@ -188,11 +213,13 @@ public class GameManager : MonoBehaviour
         {
             tank.Reset();
         }
+
+
     }
 
     private void SetCameraTargets()
     {
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
 
         List<Transform> targets = new List<Transform>();
 
@@ -200,9 +227,9 @@ public class GameManager : MonoBehaviour
         {
             targets.Add(tanks[i].instance.transform);
         }
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            targets.Add(enemies[i].transform);
+            targets.Add(enemies[i].instance.transform);
         }
 
         cameraControl.targetTanks = targets.ToArray();
@@ -216,6 +243,35 @@ public class GameManager : MonoBehaviour
             tanks[i].playerNumber = i + 1;
             tanks[i].Setup();
         }
+    }
+
+    private void SpawnAllEnemies()
+    {
+        for (int i = 0; i < roundNumber + 1; i++)
+        {
+            var spawnPoint = GameObject.FindGameObjectWithTag("EnemySpawnPoint" + (i + 1)).transform;
+            enemies.Add(new EnemyManager()
+            {
+                enemyColor = Color.yellow,
+                instance = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation) as GameObject
+            });
+
+        }
+
+        foreach (var enemy in enemies)
+        {
+            enemy.Setup();
+        }
+    }
+
+    private void RemoveAllEnemies()
+    {
+        foreach (var enemy in enemies)
+        {
+            Destroy(enemy.instance);
+        }
+
+        enemies = new List<EnemyManager>();
     }
 
 }

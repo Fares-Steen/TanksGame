@@ -1,25 +1,32 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 
-
-[Serializable]
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField]
+    [HideInInspector]
     public Transform spwanPoint;
 
     [HideInInspector]
-    public Color PlayerColor;
+    public Color enemyColor;
 
     [HideInInspector]
     public int playerNumber;
 
-    [HideInInspector]
-    public string coloredPlayerText;
 
     [HideInInspector]
     public GameObject instance;
+
+
+    public void Setup()
+    {
+
+        MeshRenderer[] renderers = instance.GetComponentsInChildren<MeshRenderer>();
+
+        foreach (var renderer in renderers)
+        {
+            renderer.material.color = enemyColor;
+        }
+    }
     void Start()
     {
 

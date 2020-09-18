@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Camera
+  - EnemySpawnPoint1
+  - EnemySpawnPoint2
+  - EnemySpawnPoint3
+  - EnemySpawnPoint4
   layers:
   - Default
   - TransparentFX
