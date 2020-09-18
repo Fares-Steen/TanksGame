@@ -69,17 +69,18 @@ public class TankMovement : MonoBehaviour
     {
         if (IsTheTankMoving())
         {
-            if (movementAduio.clip == engineDrivering)
-            {
-                SwitchAudioClipToIdle();
-            }
 
-        }
-        else
-        {
             if (movementAduio.clip == engineIdling)
             {
                 SwitchAudioClipToDriving();
+            }
+        }
+        else
+        {
+
+            if (movementAduio.clip == engineDrivering || !movementAduio.isPlaying)
+            {
+                SwitchAudioClipToIdle();
             }
         }
     }
