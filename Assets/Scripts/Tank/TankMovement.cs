@@ -40,7 +40,7 @@ public class TankMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        tankRigidbody.isKinematic = true;
+        tankRigidbody.isKinematic = false;
 
     }
 
@@ -53,8 +53,8 @@ public class TankMovement : MonoBehaviour
     }
     private void SetTheControllerForTheTank()
     {
-        movementAxisName = "Vertical" + playerNumber;
-        turnAxisName = "Horizontal" + playerNumber;
+        movementAxisName = "Vertical2";
+        turnAxisName = "Horizontal2";
     }
 
     void Update()
@@ -120,9 +120,11 @@ public class TankMovement : MonoBehaviour
 
     private void MoveTheTank()
     {
-        Vector3 movement = transform.forward * movementInputValue * tankSpeed * Time.deltaTime;
+
+        Vector3 movement = transform.forward * movementInputValue * tankSpeed * Time.fixedDeltaTime;
 
         tankRigidbody.MovePosition(tankRigidbody.position + movement);
+
     }
 
     private void TurnTheTank()

@@ -34,6 +34,19 @@ public class EnemyManager : MonoBehaviour
         SetDifficulty(difficulty);
     }
 
+    public void DisableControl()
+    {
+        enemyController.enabled = false;
+        enemyShoot.enabled = false;
+
+    }
+    public void EnableControl()
+    {
+        enemyController.enabled = true;
+        enemyShoot.enabled = true;
+
+    }
+
     void SetDifficulty(Difficulty difficulty)
     {
         switch (difficulty)

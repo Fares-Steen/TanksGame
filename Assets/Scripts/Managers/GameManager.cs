@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator RoundEnding()
     {
-        DisableTankControl();
+        DisableTanksControl();
 
         SetGameOver();
         SetFinishedTheGame();
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     private string EndMessage()
     {
-        string message = "Congratulations";
+        string message = "Ohhhhhhh";
 
         message += "\n\n\n\n";
 
@@ -128,9 +128,17 @@ public class GameManager : MonoBehaviour
 
     private void SetFinishedTheGame()
     {
-        if (numOfLevelvsNeedToWinTheGame == levelNumber)
+        if (numOfLevelvsNeedToWinTheGame == levelNumber && numOfRoundsNeedToWinTheLevel == roundNumber)
         {
-            finishedTheGame = true;
+            int numOfTanksLeft = 0;
+
+            for (int i = 0; i < tanks.Length; i++)
+            {
+                if (tanks[i].instance.activeSelf)
+                    numOfTanksLeft++;
+            }
+
+            finishedTheGame = numOfTanksLeft > 0;
         }
     }
 
@@ -172,6 +180,11 @@ public class GameManager : MonoBehaviour
         {
             tank.EnableControl();
         }
+
+        foreach (var enemy in enemies)
+        {
+            enemy.EnableControl();
+        }
     }
 
     private IEnumerator RoundStarting()
@@ -184,8 +197,8 @@ public class GameManager : MonoBehaviour
         ResetAllTanks();
         RemoveAllEnemies();
 
-        DisableTankControl();
         SpawnAllEnemies();
+        DisableTanksControl();
 
         SetCameraTargets();
         cameraControl.SetStartPositionAndSize();
@@ -198,11 +211,16 @@ public class GameManager : MonoBehaviour
         yield return startWait;
     }
 
-    private void DisableTankControl()
+    private void DisableTanksControl()
     {
         foreach (var tank in tanks)
         {
             tank.DisableControl();
+        }
+
+        foreach (var enemy in enemies)
+        {
+            enemy.DisableControl();
         }
     }
 
