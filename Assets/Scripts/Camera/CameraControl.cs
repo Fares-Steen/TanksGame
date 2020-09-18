@@ -18,9 +18,12 @@ public class CameraControl : MonoBehaviour
     private Vector3 moveVelocity;
     private Vector3 desiredPosition;
 
-    void OnEnable()
+    void Awake()
     {
-        camera = GetComponentInChildren<Camera>();
+        if (camera == null)
+        {
+            camera = GetComponentInChildren<Camera>();
+        }
     }
 
 
@@ -130,6 +133,10 @@ public class CameraControl : MonoBehaviour
     {
         FindAveragePosition();
         transform.position = desiredPosition;
+        if (camera == null)
+        {
+            camera = GetComponentInChildren<Camera>();
+        }
         camera.orthographicSize = FindRequiredSize();
     }
 }

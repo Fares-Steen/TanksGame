@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     private float endDelay = 3f;
 
-    [SerializeField]
+
     private CameraControl cameraControl;
 
     [SerializeField]
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
-
+        cameraControl = GameObject.FindGameObjectWithTag("Camera").GetComponent<CameraControl>();
         SpawnAllTanks();
 
         SetCameraTargets();
