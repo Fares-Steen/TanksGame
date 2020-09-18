@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 {
 
 
-    private int numOfRoundsNeedToWin = 2;
+    private int numOfRoundsNeedToWinTheLevel = 4;
+    private int numOfLevelvsNeedToWinTheGame = 5;
 
 
     private float startDelay = 3f;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
     private TankManager roundWinner;
     private bool gameOver;
     private bool levelWins;
+    private bool finishedTheGame;
 
     void Awake()
     {
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
 
         if (gameOver)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
         }
         else
         {
@@ -80,43 +82,34 @@ public class GameManager : MonoBehaviour
         DisableTankControl();
 
         SetGameOver();
-        if (numOfRoundsNeedToWin == roundNumber)
+        SetFinishedTheGame();
+        if (numOfRoundsNeedToWinTheLevel == roundNumber)
         {
             levelWins = true;
             roundNumber = 0;
         }
-        //if (roundWinner != null)
-        //{
-        //    roundWinner.wins++;
-        //}
+        if (finishedTheGame)
+        {
+            string message = EndMessage();
+            messageText.text = message;
+            endWait = new WaitForSeconds(15f);
+            SceneManager.LoadScene(0);
+        }
 
-        //gameWinner = GetGameWinner();
-        //string message = EndMessage();
-        //messageText.text = message;
+
         yield return endWait;
     }
 
+
+
     private string EndMessage()
     {
-        string message = "DRAW!";
-
-        if (roundWinner != null)
-        {
-            message = roundWinner.coloredPlayerText + " WINS THE ROUND!";
-        }
+        string message = "Congratulations";
 
         message += "\n\n\n\n";
 
-        foreach (var tank in tanks)
-        {
-            message += tank.coloredPlayerText + ": " + tank.wins + " WINS\n";
+        message += "<color=#2A64B2>You have finished the Game!!</color>";
 
-        }
-
-        //if (gameWinner != null)
-        //{
-        //    message = gameWinner.coloredPlayerText + " WINS THE GAME!";
-        //}
         return message;
     }
 
@@ -133,7 +126,13 @@ public class GameManager : MonoBehaviour
         gameOver = numOfTanksLeft < 1;
     }
 
-
+    private void SetFinishedTheGame()
+    {
+        if (numOfLevelvsNeedToWinTheGame == levelNumber)
+        {
+            finishedTheGame = true;
+        }
+    }
 
     private IEnumerator RoundPlaying()
     {
@@ -252,7 +251,7 @@ public class GameManager : MonoBehaviour
             var spawnPoint = GameObject.FindGameObjectWithTag("EnemySpawnPoint" + (i + 1)).transform;
             enemies.Add(new EnemyManager()
             {
-                enemyColor = Color.yellow,
+                enemyColor = GetEnemiesColor(),
                 instance = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation) as GameObject
             });
 
@@ -260,7 +259,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var enemy in enemies)
         {
-            enemy.Setup();
+            enemy.Setup(GetEnemiesDifficlty());
         }
     }
 
@@ -272,6 +271,46 @@ public class GameManager : MonoBehaviour
         }
 
         enemies = new List<EnemyManager>();
+    }
+
+    private Difficulty GetEnemiesDifficlty()
+    {
+        switch (levelNumber)
+        {
+            case 1:
+                return Difficulty.Easy;
+            case 2:
+                return Difficulty.Normal;
+            case 3:
+                return Difficulty.Hard;
+            case 4:
+                return Difficulty.Professional;
+            case 5:
+                return Difficulty.God;
+            default:
+                return Difficulty.Easy;
+
+        }
+    }
+
+    private Color GetEnemiesColor()
+    {
+        switch (levelNumber)
+        {
+            case 1:
+                return Color.yellow;
+            case 2:
+                return Color.white;
+            case 3:
+                return Color.green;
+            case 4:
+                return Color.red;
+            case 5:
+                return Color.black;
+            default:
+                return Color.yellow;
+
+        }
     }
 
 }

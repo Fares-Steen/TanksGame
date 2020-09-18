@@ -746,9 +746,9 @@ GameObject:
   - component: {fileID: 6342037568942169277}
   - component: {fileID: 6342037568942169278}
   - component: {fileID: 3625558190322186781}
-  - component: {fileID: 682970741}
   - component: {fileID: 520464140}
   - component: {fileID: 520464141}
+  - component: {fileID: -4399714735733085156}
   m_Layer: 0
   m_Name: TankEnemy
   m_TagString: Enemy
@@ -1016,28 +1016,6 @@ MonoBehaviour:
   fullHealthColor: {r: 0, g: 1, b: 0, a: 1}
   zeroHealthColor: {r: 1, g: 0, b: 0, a: 1}
   explostionPrefab: {fileID: 151086, guid: ee49a9a8678ecf8468eb488e1ac8d42b, type: 3}
---- !u!114 &682970741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6342037568942201768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8e22e18fa0f6624094b3cfc196026a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerNumber: 1
-  shell: {fileID: 5344452297458250685, guid: 08f3fc6f3ffc2044db0978c12503c325, type: 3}
-  fireTransform: {fileID: 179476453}
-  aimSlider: {fileID: 180033288}
-  shootingAudioSource: {fileID: 6342037568942169278}
-  ChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
-  fireClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
-  minLaunchForce: 15
-  maxLaunchForce: 30
-  maxChargeTime: 0.75
 --- !u!114 &520464140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,6 +1061,23 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-4399714735733085156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6342037568942201768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b2ce85bcaf08fa49b68140cd1d8e9e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shell: {fileID: 5344452297458250685, guid: 08f3fc6f3ffc2044db0978c12503c325, type: 3}
+  fireTransform: {fileID: 179476453}
+  minLaunchForce: 15
+  maxLaunchForce: 30
+  maxChargeTime: 0.75
 --- !u!1 &6342037568942201770
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
     public float walkPointRange;
 
     //Attacking
-    public float timeBetweenAttacks;
+    private float timeBetweenAttacks = 3f;
     bool alreadyAttacked;
 
     //State
@@ -28,6 +28,7 @@ public class EnemyController : MonoBehaviour
     {
         players = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+
     }
 
     void Update()
@@ -92,7 +93,7 @@ public class EnemyController : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            //attack code
+            GetComponent<EnemyShoot>().Fire(players.position);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
@@ -104,7 +105,23 @@ public class EnemyController : MonoBehaviour
         alreadyAttacked = false;
     }
 
+    public void SetAttackRange(float range)
+    {
+        attackRange = range;
+    }
+    public void SetSightRange(float range)
+    {
+        sightRange = range;
+    }
 
+    public void SetTimeBetweenAttacks(float time)
+    {
+        timeBetweenAttacks = time;
+    }
 
+    public void SetEnemySpeed(float speed)
+    {
+        agent.speed = speed;
+    }
 
 }
