@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts;
+using Assets.Scripts.ScoorRepository;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,9 +47,16 @@ public class GameManager : MonoBehaviour
     private bool gameOver;
     private bool levelWins;
     private bool finishedTheGame;
+    private ScoreModel score;
 
     void Awake()
     {
+        score = new ScoreModel()
+        {
+            Name = UnitySingleton.Instance.playerName,
+            Level = 1,
+            Round = 1
+        };
         enemies = new List<EnemyManager>();
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
@@ -67,14 +76,23 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(RoundPlaying());
         yield return StartCoroutine(RoundEnding());
 
-        if (gameOver)
+        if (gameOver || finishedTheGame)
         {
+            SaveScore();
             SceneManager.LoadScene(0);
         }
         else
         {
             StartCoroutine(GameLoop());
         }
+    }
+
+    private void SaveScore()
+    {
+        score.Round = roundNumber;
+        score.Level = levelNumber;
+        ScoreRepositoryAction scoreRepositoryAction = new ScoreRepositoryAction();
+        scoreRepositoryAction.SaveNewScoor(score);
     }
 
     private IEnumerator RoundEnding()
@@ -93,7 +111,7 @@ public class GameManager : MonoBehaviour
             string message = EndMessage();
             messageText.text = message;
             endWait = new WaitForSeconds(15f);
-            SceneManager.LoadScene(0);
+
         }
 
 
