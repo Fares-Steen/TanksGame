@@ -63,8 +63,12 @@ public class TankHealth : MonoBehaviour
         explostionParticles.transform.position = transform.position;
         explostionParticles.gameObject.SetActive(true);
         explostionParticles.Play();
+
         explosionAudio.Play();
         gameObject.SetActive(false);
+
+
+        Destroy(explostionParticles.gameObject, 2f);
 
     }
 }

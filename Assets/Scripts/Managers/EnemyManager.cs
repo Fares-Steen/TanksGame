@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager
 {
     [HideInInspector]
     public Transform spwanPoint;
