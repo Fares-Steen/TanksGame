@@ -1,5 +1,6 @@
 ﻿using Assets.Enums;
 using Assets.Scripts;
+using Assets.Scripts.Extension;
 using Assets.Scripts.ScoorRepository;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,7 +38,8 @@ public class MainMenu : MonoBehaviour
     {
         ScoreRepositoryAction scoreRepositoryAction = new ScoreRepositoryAction();
         var scoreList = scoreRepositoryAction.GetScores();
-
+        scoreList.Scores = scoreList.Scores.SortBy(s => s.Round);
+        scoreList.Scores = scoreList.Scores.SortBy(s => s.Level);
         foreach (var score in scoreList.Scores)
         {
             var text = Instantiate(scoorPreFab);
