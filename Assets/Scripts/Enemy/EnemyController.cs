@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    public Vector3 firstPosition;
+
     //Patroling
     public Vector3 walkPoint;
     bool walkPointsSet;
@@ -28,7 +30,7 @@ public class EnemyController : MonoBehaviour
     {
         players = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-
+        firstPosition = transform.position;
     }
 
     void Update()
@@ -74,7 +76,7 @@ public class EnemyController : MonoBehaviour
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        walkPoint = new Vector3(firstPosition.x + randomX, firstPosition.y, firstPosition.z + randomZ);
 
         if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
         {

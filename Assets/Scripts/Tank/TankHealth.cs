@@ -20,7 +20,7 @@ public class TankHealth : MonoBehaviour
     private ParticleSystem explostionParticles;
     private float currentHealth;
     private bool dead;
-
+    private bool isGodModActive = false;
 
     private void Awake()
     {
@@ -43,12 +43,16 @@ public class TankHealth : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        currentHealth -= amount;
-        SetHealthInUI();
-        if (currentHealth <= 0f && !dead)
+        if (!isGodModActive)
         {
-            OnDeath();
+            currentHealth -= amount;
+            SetHealthInUI();
+            if (currentHealth <= 0f && !dead)
+            {
+                OnDeath();
+            }
         }
+
     }
 
     private void SetHealthInUI()
@@ -70,5 +74,10 @@ public class TankHealth : MonoBehaviour
 
         Destroy(explostionParticles.gameObject, 2f);
 
+    }
+
+    public void SetGodMod(bool godMod)
+    {
+        isGodModActive = godMod;
     }
 }

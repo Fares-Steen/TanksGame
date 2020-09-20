@@ -24,12 +24,16 @@ public class TankManager
 
     private TankMovement movement;
     private TankShooting shooting;
+    private TankHealth health;
     private GameObject canvasGameObject;
 
-    public void Setup()
+    public void Setup(bool godMod = false)
     {
         movement = instance.GetComponent<TankMovement>();
         shooting = instance.GetComponent<TankShooting>();
+        health = instance.GetComponent<TankHealth>();
+
+        SetGodMod(godMod);
         canvasGameObject = instance.GetComponentInChildren<Canvas>().gameObject;
 
         movement.playerNumber = playerNumber;
@@ -43,6 +47,11 @@ public class TankManager
         {
             renderer.material.color = PlayerColor;
         }
+    }
+
+    private void SetGodMod(bool godMod)
+    {
+        health.SetGodMod(godMod);
     }
 
     public void DisableControl()

@@ -8,6 +8,8 @@ namespace Assets.Scripts
 
         public string playerName { get; set; }
 
+        public bool godMod { get; set; } = false;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 namespace Assets.Scripts.ScoorRepository
 {
@@ -31,7 +32,10 @@ namespace Assets.Scripts.ScoorRepository
             catch (System.Exception)
             {
 
-                return new ScoreModelCollection();
+                return new ScoreModelCollection()
+                {
+                    Scores = new List<ScoreModel>()
+                };
             }
         }
     }

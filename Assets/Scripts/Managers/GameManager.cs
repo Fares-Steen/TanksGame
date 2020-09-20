@@ -1,4 +1,5 @@
-﻿using Assets.Scripts;
+﻿using Assets.Enums;
+using Assets.Scripts;
 using Assets.Scripts.ScoorRepository;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
 
 
-    private int numOfRoundsNeedToWinTheLevel = 4;
+    private int numOfRoundsNeedToWinTheLevel = 2;
     private int numOfLevelvsNeedToWinTheGame = 5;
 
 
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     private bool levelWins;
     private bool finishedTheGame;
     private ScoreModel score;
+    private bool godMod;
 
     void Awake()
     {
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
             Level = 1,
             Round = 1
         };
+        godMod = UnitySingleton.Instance.godMod;
         enemies = new List<EnemyManager>();
         startWait = new WaitForSeconds(startDelay);
         endWait = new WaitForSeconds(endDelay);
@@ -79,7 +82,7 @@ public class GameManager : MonoBehaviour
         if (gameOver || finishedTheGame)
         {
             SaveScore();
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene((int)EScens.MainMenu);
         }
         else
         {
@@ -89,10 +92,14 @@ public class GameManager : MonoBehaviour
 
     private void SaveScore()
     {
-        score.Round = roundNumber;
-        score.Level = levelNumber;
-        ScoreRepositoryAction scoreRepositoryAction = new ScoreRepositoryAction();
-        scoreRepositoryAction.SaveNewScoor(score);
+        if (!string.IsNullOrEmpty(score.Name))
+        {
+            score.Round = roundNumber;
+            score.Level = levelNumber;
+            ScoreRepositoryAction scoreRepositoryAction = new ScoreRepositoryAction();
+            scoreRepositoryAction.SaveNewScoor(score);
+        }
+
     }
 
     private IEnumerator RoundEnding()
@@ -101,14 +108,15 @@ public class GameManager : MonoBehaviour
 
         SetGameOver();
         SetFinishedTheGame();
-        if (numOfRoundsNeedToWinTheLevel == roundNumber)
+        if (numOfRoundsNeedToWinTheLevel == roundNumber && !gameOver)
         {
             levelWins = true;
             roundNumber = 0;
         }
         if (finishedTheGame)
         {
-            string message = EndMessage();
+            string message = EndMessage(godMod);
+
             messageText.text = message;
             endWait = new WaitForSeconds(15f);
 
@@ -120,13 +128,22 @@ public class GameManager : MonoBehaviour
 
 
 
-    private string EndMessage()
+    private string EndMessage(bool godMod)
     {
         string message = "Ohhhhhhh";
 
         message += "\n\n\n\n";
 
-        message += "<color=#2A64B2>You have finished the Game!!</color>";
+        if (godMod)
+        {
+            message += "<color=#2A64B2>The End of the game!!</color>";
+
+        }
+        else
+        {
+            message += "<color=#2A64B2>You have finished the Game!!</color>";
+
+        }
 
         return message;
     }
@@ -276,13 +293,14 @@ public class GameManager : MonoBehaviour
         {
             tanks[i].instance = Instantiate(tankPrefab, tanks[i].spwanPoint.position, tanks[i].spwanPoint.rotation) as GameObject;
             tanks[i].playerNumber = i + 1;
-            tanks[i].Setup();
+            tanks[i].Setup(godMod);
         }
     }
 
     private void SpawnAllEnemies()
     {
-        for (int i = 0; i < roundNumber + 1; i++)
+        var numberofEnemies = roundNumber == 0 ? 2 : 4;
+        for (int i = 0; i < numberofEnemies; i++)
         {
             var spawnPoint = GameObject.FindGameObjectWithTag("EnemySpawnPoint" + (i + 1)).transform;
             enemies.Add(new EnemyManager()
