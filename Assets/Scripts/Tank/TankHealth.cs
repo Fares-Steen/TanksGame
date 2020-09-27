@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TankHealth : MonoBehaviour
@@ -22,6 +23,7 @@ public class TankHealth : MonoBehaviour
     private bool dead;
     private bool isGodModActive = false;
 
+    public event EventHandler<float> TankInlowHealth;
     private void Awake()
     {
         PrepareExplotion();
@@ -51,6 +53,9 @@ public class TankHealth : MonoBehaviour
             {
                 OnDeath();
             }
+
+            TankInlowHealth?.Invoke(this, currentHealth);
+
         }
 
     }

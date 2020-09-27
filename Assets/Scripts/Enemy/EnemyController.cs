@@ -1,9 +1,20 @@
 ﻿
+using Assets.Scripts.Enemy.EnemyStates;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField]
+    private string currentStateName;
+    private IAiState currentState;
+
+    public PatrolingState patrolingState = new PatrolingState();
+    public AttackingState attackingState = new AttackingState();
+    public ChasingState chasingState = new ChasingState();
+    public FleeingState fleeingState = new FleeingState();
+
+
     public NavMeshAgent agent;
 
     public Transform players;
@@ -14,23 +25,34 @@ public class EnemyController : MonoBehaviour
 
     //Patroling
     public Vector3 walkPoint;
-    bool walkPointsSet;
+    public bool walkPointsSet;
+    public bool walkPointsAwayFromPlayerSet;
     public float walkPointRange;
 
     //Attacking
-    private float timeBetweenAttacks = 3f;
-    bool alreadyAttacked;
+    public float timeBetweenAttacks = 3f;
+    public bool alreadyAttacked;
 
     //State
     private float sightRange = 20f;
     private float attackRange = 12f;
-    private bool playerInSightRange, playerInAttachRange;
+    [HideInInspector]
+    public bool playerInSightRange, playerInAttachRange;
+    private TankHealth health;
+    public bool LowInhealth { get; private set; }
+
+    private void OnEnable()
+    {
+        currentState = patrolingState;
+    }
 
     private void Start()
     {
         players = GameObject.FindGameObjectWithTag("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+
         firstPosition = transform.position;
+        health = GetComponent<TankHealth>();
+        health.TankInlowHealth += WhenEnemeyTakeDamage;
     }
 
     void Update()
@@ -38,75 +60,37 @@ public class EnemyController : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttachRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (!playerInAttachRange && !playerInSightRange)
-        {
-            Patroling();
-        }
-        if (!playerInAttachRange && playerInSightRange)
-        {
-            ChasePlayer();
-        }
-        if (playerInAttachRange && playerInSightRange)
-        {
-            AttackPlayer();
-        }
+        currentState = currentState.DoState(this);
+        currentStateName = currentState.ToString();
+
     }
 
-    private void Patroling()
+
+
+
+
+
+
+
+
+
+    private void WhenEnemeyTakeDamage(object sender, float currentHealth)
     {
-        if (!walkPointsSet)
+        if (currentHealth < 50)
         {
-            SearchWalkPoint();
+            LowInhealth = true;
         }
-        else
+        if (currentHealth <= 0)
         {
-            agent.SetDestination(walkPoint);
-        }
-
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        //WalkPoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointsSet = false;
-    }
-
-    private void SearchWalkPoint()
-    {
-        //Calculate random point in range
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(firstPosition.x + randomX, firstPosition.y, firstPosition.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
-        {
-            walkPointsSet = true;
-        }
-    }
-
-    private void ChasePlayer()
-    {
-        agent.SetDestination(players.position);
-    }
-    private void AttackPlayer()
-    {
-        agent.SetDestination(transform.position);
-        transform.LookAt(players);
-
-        if (!alreadyAttacked)
-        {
-            GetComponent<EnemyShoot>().Fire(players.position);
-
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            health.TankInlowHealth -= WhenEnemeyTakeDamage;
         }
     }
 
     private void ResetAttack()
     {
+
         alreadyAttacked = false;
     }
-
     public void SetAttackRange(float range)
     {
         attackRange = range;
